@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✨ Nuestro Viaje Mágico ✨</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ice-deep: #071a2e;
+    --ice-navy: #0d2744;
+    --ice-mid: #1a4a7a;
+    --ice-blue: #3a8fc9;
+    --ice-light: #7ec8e3;
+    --ice-crystal: #b8e4f9;
+    --ice-white: #e8f6ff;
+    --frost: rgba(184,228,249,0.12);
+    --frost-border: rgba(126,200,227,0.3);
+    --snow: #ffffff;
+    --gold: #f9d57e;
+    --gold-light: #fdedb5;
+    --elsa: #6fc3df;
+    --magic: #c4e8f5;
+    --shadow-ice: 0 8px 32px rgba(10,40,80,0.6);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--ice-deep);
+    color: var(--ice-white);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ---- ANIMATED BACKGROUND ---- */
+  .bg-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .bg-gradient {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 10%, rgba(106,195,223,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(58,143,201,0.14) 0%, transparent 60%),
+      radial-gradient(ellipse 100% 100% at 50% 50%, var(--ice-deep) 0%, #040e1c 100%);
+  }
+
+  .aurora {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(58,143,201,0.05) 0%,
+      transparent 30%,
+      rgba(106,195,223,0.07) 60%,
+      transparent 100%
+    );
+    animation: aurora 12s ease-in-out infinite alternate;
+  }
+
+  @keyframes aurora {
+    0% { opacity: 0.4; transform: translateY(-20px) scaleX(1); }
+    50% { opacity: 0.8; transform: translateY(20px) scaleX(1.05); }
+    100% { opacity: 0.4; transform: translateY(-10px) scaleX(0.97); }
+  }
+
+  /* ---- SNOWFLAKES ---- */
+  #snow-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.55;
+  }
+
+  /* ---- ICE CRYSTALS DECORATION ---- */
+  .crystal-corner {
+    position: fixed;
+    z-index: 1;
+    opacity: 0.18;
+    pointer-events: none;
+  }
+  .crystal-corner.tl { top: -20px; left: -20px; transform: rotate(0deg); }
+  .crystal-corner.tr { top: -20px; right: -20px; transform: rotate(90deg); }
+  .crystal-corner.bl { bottom: -20px; left: -20px; transform: rotate(270deg); }
+
+  /* ---- CONTENT WRAPPER ---- */
+  .wrapper {
+    position: relative;
+    z-index: 2;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 16px 60px;
+  }
+
+  /* ---- HERO HEADER ---- */
+  .hero {
+    text-align: center;
+    padding: 52px 20px 36px;
+    position: relative;
+  }
+
+  .hero-snowflake {
+    font-size: 2.2rem;
+    animation: spin-slow 20s linear infinite;
+    display: inline-block;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 0 12px rgba(126,200,227,0.8));
+  }
+
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .hero h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    background: linear-gradient(135deg, var(--ice-crystal) 0%, var(--gold) 45%, var(--ice-crystal) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem;
+    color: var(--ice-light);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 300;
+    margin-bottom: 24px;
+    opacity: 0.85;
+  }
+
+  .hero-dates {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--frost);
+    border: 1px solid var(--frost-border);
+    border-radius: 30px;
+    padding: 8px 20px;
+    font-size: 0.85rem;
+    color: var(--ice-crystal);
+    letter-spacing: 0.08em;
+    backdrop-filter: blur(10px);
+  }
+
+  /* ---- DAY TABS ---- */
+  .tabs-container {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 12px 0;
+    background: linear-gradient(180deg, var(--ice-deep) 70%, transparent);
+    margin-bottom: 8px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 4px 2px;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    flex-shrink: 0;
+    background: var(--frost);
+    border: 1px solid var(--frost-border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    min-width: 90px;
+  }
+
+  .tab:hover {
+    border-color: var(--ice-light);
+    background: rgba(126,200,227,0.15);
+    transform: translateY(-2px);
+  }
+
+  .tab.active {
+    background: linear-gradient(135deg, rgba(58,143,201,0.5), rgba(106,195,223,0.3));
+    border-color: var(--ice-crystal);
+    box-shadow: 0 0 20px rgba(106,195,223,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+    transform: translateY(-2px);
+  }
+
+  .tab-day {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--ice-light);
+    text-transform: uppercase;
+    display: block;
+  }
+
+  .tab-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--ice-white);
+    display: block;
+    margin-top: 2px;
+  }
+
+  .tab.active .tab-day { color: var(--ice-crystal); }
+  .tab.active .tab-label { color: var(--snow); }
+
+  .tab-emoji {
+    font-size: 1.2rem;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  /* ---- DAY PANEL ---- */
+  .day-panel {
+    display: none;
+    animation: fadeSlide 0.4s ease;
+  }
+  .day-panel.active { display: block; }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding: 18px 22px;
+    background: linear-gradient(135deg, rgba(58,143,201,0.2), rgba(106,195,223,0.1));
+    border: 1px solid var(--frost-border);
+    border-radius: 18px;
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .day-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ice-crystal), transparent);
+  }
+
+  .day-header-emoji {
+    font-size: 2.4rem;
+    filter: drop-shadow(0 0 10px rgba(126,200,227,0.5));
+  }
+
+  .day-header-info h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    color: var(--ice-crystal);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .day-header-info p {
+    font-size: 0.82rem;
+    color: var(--ice-light);
+    opacity: 0.8;
+    margin-top: 3px;
+  }
+
+  .day-badge {
+    margin-left: auto;
+    background: var(--frost);
+    border: 1px solid var(--frost-border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 0.75rem;
+    color: var(--ice-crystal);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  /* ---- TIMELINE ---- */
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    bottom: 10px;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, var(--frost-border) 15%, var(--frost-border) 85%, transparent);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 12px;
+    cursor: pointer;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -23px;
+    top: 18px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--ice-blue);
+    background: var(--ice-deep);
+    box-shadow: 0 0 8px rgba(58,143,201,0.5);
+    transition: all 0.3s;
+    z-index: 2;
+  }
+
+  .timeline-item:hover .timeline-dot,
+  .timeline-item.open .timeline-dot {
+    background: var(--ice-crystal);
+    border-color: var(--ice-crystal);
+    box-shadow: 0 0 12px rgba(184,228,249,0.7);
+    transform: scale(1.2);
+  }
+
+  /* Activity type colors */
+  .dot-food    { border-color: #f9a94e; box-shadow: 0 0 8px rgba(249,169,78,0.5); }
+  .dot-show    { border-color: #c078f0; box-shadow: 0 0 8px rgba(192,120,240,0.5); }
+  .dot-travel  { border-color: #5de0b5; box-shadow: 0 0 8px rgba(93,224,181,0.5); }
+  .dot-ride    { border-color: var(--gold); box-shadow: 0 0 8px rgba(249,213,126,0.5); }
+  .dot-magic   { border-color: var(--ice-crystal); box-shadow: 0 0 8px rgba(184,228,249,0.7); }
+  .dot-walk    { border-color: #8db4d6; box-shadow: 0 0 8px rgba(141,180,214,0.4); }
+
+  /* ---- ACTIVITY CARD ---- */
+  .activity-card {
+    background: var(--frost);
+    border: 1px solid var(--frost-border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(6px);
+    overflow: hidden;
+  }
+
+  .activity-card:hover {
+    border-color: rgba(126,200,227,0.5);
+    background: rgba(184,228,249,0.09);
+    transform: translateX(4px);
+    box-shadow: var(--shadow-ice);
+  }
+
+  .timeline-item.open .activity-card {
+    border-color: rgba(126,200,227,0.55);
+    background: rgba(58,143,201,0.12);
+    box-shadow: 0 4px 24px rgba(10,40,80,0.4);
+  }
+
+  .card-main {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .card-time {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    color: var(--ice-light);
+    min-width: 42px;
+    opacity: 0.85;
+    letter-spacing: 0.04em;
+  }
+
+  .card-icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 4px rgba(126,200,227,0.4));
+  }
+
+  .card-text { flex: 1; min-width: 0; }
+
+  .card-title {
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--snow);
+    line-height: 1.3;
+  }
+
+  .card-tag {
+    display: inline-block;
+    font-size: 0.67rem;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  .tag-food    { background: rgba(249,169,78,0.2);  color: #f9c87e; border: 1px solid rgba(249,169,78,0.3); }
+  .tag-show    { background: rgba(192,120,240,0.2); color: #d4a0f5; border: 1px solid rgba(192,120,240,0.3); }
+  .tag-travel  { background: rgba(93,224,181,0.2);  color: #7eeecf; border: 1px solid rgba(93,224,181,0.3); }
+  .tag-ride    { background: rgba(249,213,126,0.2); color: var(--gold); border: 1px solid rgba(249,213,126,0.3); }
+  .tag-magic   { background: rgba(184,228,249,0.15); color: var(--ice-crystal); border: 1px solid rgba(184,228,249,0.3); }
+  .tag-walk    { background: rgba(141,180,214,0.15); color: #b0d0e8; border: 1px solid rgba(141,180,214,0.25); }
+
+  .card-chevron {
+    color: var(--ice-light);
+    font-size: 0.8rem;
+    transition: transform 0.3s;
+    opacity: 0.6;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  .timeline-item.open .card-chevron { transform: rotate(180deg); opacity: 1; }
+
+  /* ---- EXPANDED NOTES ---- */
+  .card-notes {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.3s;
+    opacity: 0;
+  }
+
+  .timeline-item.open .card-notes {
+    max-height: 200px;
+    opacity: 1;
+    padding-top: 12px;
+  }
+
+  .notes-inner {
+    border-top: 1px solid var(--frost-border);
+    padding-top: 10px;
+    margin-top: 2px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .notes-icon { color: var(--ice-light); font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
+
+  .notes-text {
+    font-size: 0.84rem;
+    color: var(--ice-crystal);
+    line-height: 1.5;
+    opacity: 0.9;
+  }
+
+  .confirmed-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(93,224,181,0.15);
+    border: 1px solid rgba(93,224,181,0.3);
+    color: #7eeecf;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 6px;
+    margin-left: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .priority-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(249,213,126,0.15);
+    border: 1px solid rgba(249,213,126,0.3);
+    color: var(--gold);
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 6px;
+    margin-left: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ---- FOOTER ---- */
+  .footer {
+    text-align: center;
+    padding: 30px 0 10px;
+    color: var(--ice-light);
+    font-size: 0.78rem;
+    opacity: 0.5;
+    letter-spacing: 0.08em;
+  }
+
+  .footer-snowflake { font-size: 1.2rem; display: block; margin-bottom: 8px; animation: pulse-glow 3s ease-in-out infinite; }
+
+  @keyframes pulse-glow {
+    0%, 100% { filter: drop-shadow(0 0 4px rgba(126,200,227,0.3)); opacity: 0.5; }
+    50% { filter: drop-shadow(0 0 12px rgba(126,200,227,0.8)); opacity: 0.9; }
+  }
+
+  /* ---- ICE CRYSTAL SVG ---- */
+  .ice-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 18px 0;
+    opacity: 0.25;
+  }
+  .ice-divider-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--ice-crystal), transparent); }
+  .ice-divider-star { color: var(--ice-crystal); font-size: 0.9rem; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--frost-border); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<div class="bg-layer">
+  <div class="bg-gradient"></div>
+  <div class="aurora"></div>
+</div>
+
+<canvas id="snow-canvas"></canvas>
+
+<!-- Ice corner decoration -->
+<svg class="crystal-corner tl" width="200" height="200" viewBox="0 0 200 200">
+  <g stroke="#7ec8e3" stroke-width="1" fill="none">
+    <line x1="20" y1="20" x2="180" y2="20"/><line x1="20" y1="20" x2="20" y2="180"/>
+    <line x1="20" y1="20" x2="120" y2="120"/>
+    <polygon points="50,20 80,50 50,80 20,50" />
+    <polygon points="20,50 50,80 80,50 50,20" opacity=".4"/>
+    <circle cx="20" cy="20" r="6"/><circle cx="80" cy="80" r="4"/><circle cx="140" cy="20" r="3"/>
+    <line x1="20" y1="20" x2="20" y2="20" /><line x1="50" y1="20" x2="50" y2="60"/>
+    <line x1="20" y1="50" x2="60" y2="50"/>
+  </g>
+</svg>
+<svg class="crystal-corner tr" width="200" height="200" viewBox="0 0 200 200">
+  <g stroke="#7ec8e3" stroke-width="1" fill="none">
+    <line x1="20" y1="20" x2="180" y2="20"/><line x1="20" y1="20" x2="20" y2="180"/>
+    <line x1="20" y1="20" x2="120" y2="120"/>
+    <polygon points="50,20 80,50 50,80 20,50" />
+    <circle cx="20" cy="20" r="6"/><circle cx="80" cy="80" r="4"/><circle cx="140" cy="20" r="3"/>
+  </g>
+</svg>
+
+<div class="wrapper">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-snowflake">❄</div>
+    <h1>Nuestro Viaje Mágico</h1>
+    <div class="hero-subtitle">Disneyland Paris · La Ciudad de la Luz</div>
+    <div class="hero-dates">
+      ✨ &nbsp; 27 de Abril — 2 de Mayo de 2025 &nbsp; ✨
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs-container">
+    <div class="tabs" id="tabs">
+      <div class="tab active" onclick="switchDay(0)">
+        <span class="tab-emoji">✈️</span>
+        <span class="tab-day">Lun 27</span>
+        <span class="tab-label">Llegada</span>
+      </div>
+      <div class="tab" onclick="switchDay(1)">
+        <span class="tab-emoji">🌊</span>
+        <span class="tab-day">Mar 28</span>
+        <span class="tab-label">Adventure</span>
+      </div>
+      <div class="tab" onclick="switchDay(2)">
+        <span class="tab-emoji">🏰</span>
+        <span class="tab-day">Mié 29</span>
+        <span class="tab-label">Fantasyland</span>
+      </div>
+      <div class="tab" onclick="switchDay(3)">
+        <span class="tab-emoji">👑</span>
+        <span class="tab-day">Jue 30</span>
+        <span class="tab-label">Princesas</span>
+      </div>
+      <div class="tab" onclick="switchDay(4)">
+        <span class="tab-emoji">🗼</span>
+        <span class="tab-day">Vie 01</span>
+        <span class="tab-label">París</span>
+      </div>
+      <div class="tab" onclick="switchDay(5)">
+        <span class="tab-emoji">🌹</span>
+        <span class="tab-day">Sáb 02</span>
+        <span class="tab-label">Marais</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DAY 0: LUNES 27 ===== -->
+  <div class="day-panel active" id="day-0">
+    <div class="day-header">
+      <div class="day-header-emoji">✈️</div>
+      <div class="day-header-info">
+        <h2>Lunes 27 de Abril — Llegada Mágica</h2>
+        <p>Del aeropuerto al reino de hielo</p>
+      </div>
+      <div class="day-badge">5 actividades</div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-travel"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">11:55</span>
+            <span class="card-icon">✈️</span>
+            <div class="card-text">
+              <div class="card-title">Llegada a Orly</div>
+              <span class="card-tag tag-travel">Traslado</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">📍</span>
+              <span class="notes-text">Traslado privado directo al Newport Bay Club. ¡El reino os espera!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-food"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">13:45</span>
+            <span class="card-icon">🍔</span>
+            <div class="card-text">
+              <div class="card-title">Comida: Annette's Diner</div>
+              <span class="card-tag tag-food">Restaurante</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">📍</span>
+              <span class="notes-text">Disney Village. Sin reserva previa — llegar con tiempo suficiente.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-magic"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">16:40</span>
+            <span class="card-icon">💄</span>
+            <div class="card-text">
+              <div class="card-title">Mon Rêve Royal — Cita de Maquillaje</div>
+              <span class="card-tag tag-magic">Experiencia</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">🏰</span>
+              <span class="notes-text">Disneyland Hotel. ¡La transformación en princesa! Llevar ropa de princesa para después.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-magic"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">18:30</span>
+            <span class="card-icon">🏰</span>
+            <div class="card-text">
+              <div class="card-title">Entrada al Parque — Fotos del Castillo</div>
+              <span class="card-tag tag-magic">Magia Disney</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">📸</span>
+              <span class="notes-text">Fotos en el Castillo y en It's a Small World. La hora dorada perfecta para fotos.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-food"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">20:30</span>
+            <span class="card-icon">🦞</span>
+            <div class="card-text">
+              <div class="card-title">Cena: Cape Cod</div>
+              <span class="card-tag tag-food">Cena</span>
+              <span class="confirmed-badge">✓ Confirmado</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">🍽️</span>
+              <span class="notes-text">Buffet Newport Bay Club. Reserva confirmada. La mejor manera de cerrar el primer día mágico.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== DAY 1: MARTES 28 ===== -->
+  <div class="day-panel" id="day-1">
+    <div class="day-header">
+      <div class="day-header-emoji">🌊</div>
+      <div class="day-header-info">
+        <h2>Martes 28 de Abril — Disney Adventure</h2>
+        <p>Frozen, Pixar y la magia sin fin</p>
+      </div>
+      <div class="day-badge">6 actividades</div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-ride"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">08:30</span>
+            <span class="card-icon">❄️</span>
+            <div class="card-text">
+              <div class="card-title">Early Access: Frozen Ever After</div>
+              <span class="card-tag tag-ride">Atracción</span>
+              <span class="priority-badge">★ Premier Access</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">❄️</span>
+              <span class="notes-text">¡Lo primero del día! Aprovechar el acceso anticipado para evitar colas. ¡El momento más Frozen del viaje!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-magic"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">09:15</span>
+            <span class="card-icon">⛄</span>
+            <div class="card-text">
+              <div class="card-title">Encuentro con Olaf</div>
+              <span class="card-tag tag-magic">Meet & Greet</span>
+              <span class="priority-badge">★ Prioridad</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">📱</span>
+              <span class="notes-text">Reserva gestionada desde la App Disneyland. ¡Llegar 5 minutos antes! Este es un momento muy especial.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-ride"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">10:30</span>
+            <span class="card-icon">🕷️</span>
+            <div class="card-text">
+              <div class="card-title">Ruta Disney Adventure</div>
+              <span class="card-tag tag-ride">Atracciones</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">🗺️</span>
+              <span class="notes-text">Itinerario: Frozen Show → Ratatouille → Spider-Man. Tres momentos épicos seguidos.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-food"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">13:45</span>
+            <span class="card-icon">🧪</span>
+            <div class="card-text">
+              <div class="card-title">Comida: PYM Kitchen</div>
+              <span class="card-tag tag-food">Restaurante</span>
+              <span class="confirmed-badge">✓ Confirmado</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">🍽️</span>
+              <span class="notes-text">Buffet temático de Avengers Campus. ¡Una experiencia gastronómica de otro mundo! Reserva confirmada.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-show"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">16:50</span>
+            <span class="card-icon">🎭</span>
+            <div class="card-text">
+              <div class="card-title">Musical: Together — Espectáculo Pixar</div>
+              <span class="card-tag tag-show">Espectáculo</span>
+              <span class="confirmed-badge">✓ Confirmado</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">🎬</span>
+              <span class="notes-text">Reserva confirmada. Llegar 15 minutos antes para buenos asientos.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-show"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">18:30</span>
+            <span class="card-icon">🎩</span>
+            <div class="card-text">
+              <div class="card-title">Musical: Mickey & the Magician</div>
+              <span class="card-tag tag-show">Espectáculo</span>
+              <span class="confirmed-badge">✓ Confirmado</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">✨</span>
+              <span class="notes-text">¡El espectáculo más famoso de Disneyland Paris! Reserva confirmada. Imprescindible.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-food"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">19:45</span>
+            <span class="card-icon">🦞</span>
+            <div class="card-text">
+              <div class="card-title">Cena: Cape Cod</div>
+              <span class="card-tag tag-food">Cena</span>
+              <span class="confirmed-badge">✓ Confirmado</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">🍽️</span>
+              <span class="notes-text">Buffet Newport. El mejor cierre para un día lleno de aventuras.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== DAY 2: MIÉRCOLES 29 ===== -->
+  <div class="day-panel" id="day-2">
+    <div class="day-header">
+      <div class="day-header-emoji">🏰</div>
+      <div class="day-header-info">
+        <h2>Miércoles 29 de Abril — Fantasyland</h2>
+        <p>Desfiles, castillo y fuegos artificiales</p>
+      </div>
+      <div class="day-badge">6 actividades</div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-ride"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">09:00</span>
+            <span class="card-icon">🧚</span>
+            <div class="card-text">
+              <div class="card-title">Ruta Fantasyland</div>
+              <span class="card-tag tag-ride">Atracciones</span>
+              <span class="priority-badge">★ Premier Access</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">🗺️</span>
+              <span class="notes-text">Peter Pan (Premier Access) → Dumbo el Elefante Volador → Carrusel de Lancelot. La ruta clásica de los más pequeños.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-show"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">11:30</span>
+            <span class="card-icon">💦</span>
+            <div class="card-text">
+              <div class="card-title">Desfile: A Million Splashes of Colour</div>
+              <span class="card-tag tag-show">Desfile</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">📍</span>
+              <span class="notes-text">Show musical frente al Castillo. Ponerse en primera fila 15 min antes. ¡Hay agua!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-ride"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">15:30</span>
+            <span class="card-icon">🚂</span>
+            <div class="card-text">
+              <div class="card-title">Casey Jr. / Barquitas de los Cuentos</div>
+              <span class="card-tag tag-ride">Atracciones</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">🌊</span>
+              <span class="notes-text">El trenecito Casey Jr. y las barquitas de los cuentos de hadas. Clásicos imprescindibles.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-show"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">17:30</span>
+            <span class="card-icon">⭐</span>
+            <div class="card-text">
+              <div class="card-title">Disney Stars on Parade</div>
+              <span class="card-tag tag-show">Desfile</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">📍</span>
+              <span class="notes-text">Ver desde Fantasyland — mejor posición para ver a las Princesas. El desfile más espectacular del parque.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-food"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">19:45</span>
+            <span class="card-icon">🦞</span>
+            <div class="card-text">
+              <div class="card-title">Cena: Cape Cod</div>
+              <span class="card-tag tag-food">Cena</span>
+              <span class="confirmed-badge">✓ Confirmado</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">🍽️</span>
+              <span class="notes-text">Buffet Newport. Cenar antes del gran espectáculo nocturno.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-magic"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">22:00</span>
+            <span class="card-icon">🎆</span>
+            <div class="card-text">
+              <div class="card-title">Disney Illuminations + Sky Parade</div>
+              <span class="card-tag tag-magic">Espectáculo Nocturno</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">✨</span>
+              <span class="notes-text">Drones y fuegos artificiales sobre el Castillo. El broche de oro del viaje en Disneyland. ¡No te muevas del sitio antes de que acabe!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== DAY 3: JUEVES 30 ===== -->
+  <div class="day-panel" id="day-3">
+    <div class="day-header">
+      <div class="day-header-emoji">👑</div>
+      <div class="day-header-info">
+        <h2>Jueves 30 de Abril — Princesas y París</h2>
+        <p>Cendrillon al amanecer, el Marais al atardecer</p>
+      </div>
+      <div class="day-badge">5 actividades</div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-food"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">08:15</span>
+            <span class="card-icon">👸</span>
+            <div class="card-text">
+              <div class="card-title">Desayuno con Princesas</div>
+              <span class="card-tag tag-food">Desayuno</span>
+              <span class="confirmed-badge">✓ Confirmado</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">🏰</span>
+              <span class="notes-text">Auberge de Cendrillon. El desayuno más mágico del viaje. Reserva confirmada. ¡Ir disfrazada!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-travel"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">12:30</span>
+            <span class="card-icon">🚐</span>
+            <div class="card-text">
+              <div class="card-title">Traslado Privado a París</div>
+              <span class="card-tag tag-travel">Traslado</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">🗺️</span>
+              <span class="notes-text">2 Vans: Orly y Le Marais. Organizar equipajes antes. Rumbo a la Ciudad de la Luz.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-walk"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">16:00</span>
+            <span class="card-icon">🏛️</span>
+            <div class="card-text">
+              <div class="card-title">Le Village Saint-Paul</div>
+              <span class="card-tag tag-walk">Paseo</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">📍</span>
+              <span class="notes-text">Paseo por los patios medievales. Un laberinto secreto en el corazón del Marais. Perfecto para fotos.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-walk"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">18:30</span>
+            <span class="card-icon">🛒</span>
+            <div class="card-text">
+              <div class="card-title">Marché des Enfants Rouges</div>
+              <span class="card-tag tag-walk">Mercado</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">🥗</span>
+              <span class="notes-text">Paseo y picoteo en el mercado cubierto más antiguo de París (1615). Ambiente increíble al anochecer.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-food"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">Cena</span>
+            <span class="card-icon">🍷</span>
+            <div class="card-text">
+              <div class="card-title">Cena en el Barrio</div>
+              <span class="card-tag tag-food">Opciones</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">🍽️</span>
+              <span class="notes-text">Opciones: Le Rempart · Salento · Au Bourguignon du Marais. Según el humor del grupo.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== DAY 4: VIERNES 01 ===== -->
+  <div class="day-panel" id="day-4">
+    <div class="day-header">
+      <div class="day-header-emoji">🗼</div>
+      <div class="day-header-info">
+        <h2>Viernes 1 de Mayo — La Dame de Fer</h2>
+        <p>Torre Eiffel, crucero por el Sena y Bofinger</p>
+      </div>
+      <div class="day-badge">5 actividades</div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-food"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">09:00</span>
+            <span class="card-icon">🥐</span>
+            <div class="card-text">
+              <div class="card-title">Desayuno en el Airbnb</div>
+              <span class="card-tag tag-food">Desayuno</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">🏠</span>
+              <span class="notes-text">Miss Manon — 87 Rue Saint-Antoine. Desayuno tranquilo antes de la gran jornada parisina.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-walk"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">10:30</span>
+            <span class="card-icon">🗼</span>
+            <div class="card-text">
+              <div class="card-title">Ruta Torre Eiffel</div>
+              <span class="card-tag tag-walk">Paseo</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">🗺️</span>
+              <span class="notes-text">Trocadéro → Torre Eiffel → Champ de Mars. La mejor ruta para fotografías. Empezar desde el Trocadéro para la foto clásica.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-food"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">12:30</span>
+            <span class="card-icon">🥘</span>
+            <div class="card-text">
+              <div class="card-title">Comida: Les Cocottes</div>
+              <span class="card-tag tag-food">Restaurante</span>
+              <span class="confirmed-badge">✓ Confirmado</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">📍</span>
+              <span class="notes-text">135 Rue Saint-Dominique. Reserva confirmada. El bistró de Christian Constant, icónico del 7.º arrondissement.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-magic"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">15:00</span>
+            <span class="card-icon">⛵</span>
+            <div class="card-text">
+              <div class="card-title">Crucero: Vedettes de Paris</div>
+              <span class="card-tag tag-magic">Crucero</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">📍</span>
+              <span class="notes-text">Salida desde Port de Suffren. Una hora contemplando París desde el Sena. La perspectiva más bella de la ciudad.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-food"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">20:00</span>
+            <span class="card-icon">🦪</span>
+            <div class="card-text">
+              <div class="card-title">Cena: Bofinger</div>
+              <span class="card-tag tag-food">Cena</span>
+              <span class="confirmed-badge">✓ 02/04</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">🥂</span>
+              <span class="notes-text">Bajo la famosa cúpula Art Nouveau. La brasserie más antigua de París (1864). Reserva gestionada el 02/04. ¡Una noche especial!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== DAY 5: SÁBADO 02 ===== -->
+  <div class="day-panel" id="day-5">
+    <div class="day-header">
+      <div class="day-header-emoji">🌹</div>
+      <div class="day-header-info">
+        <h2>Sábado 2 de Mayo — Dernière Matinée</h2>
+        <p>Place des Vosges, el Marais y... hasta pronto, París</p>
+      </div>
+      <div class="day-badge">3 actividades</div>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-food"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">08:30</span>
+            <span class="card-icon">☕</span>
+            <div class="card-text">
+              <div class="card-title">Desayuno: Carette</div>
+              <span class="card-tag tag-food">Desayuno</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">📍</span>
+              <span class="notes-text">Place des Vosges. El chocolate caliente más famoso de París. El último desayuno parisino merece ser especial.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-walk"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">10:00</span>
+            <span class="card-icon">📸</span>
+            <div class="card-text">
+              <div class="card-title">Último Paseo por el Marais</div>
+              <span class="card-tag tag-walk">Paseo</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">📷</span>
+              <span class="notes-text">Fotos finales y preparar maletas. Guardar cada rincón en la memoria. No olvidar nada en el Airbnb.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" onclick="toggleItem(this)">
+        <div class="timeline-dot dot-travel"></div>
+        <div class="activity-card">
+          <div class="card-main">
+            <span class="card-time">11:00</span>
+            <span class="card-icon">🚐</span>
+            <div class="card-text">
+              <div class="card-title">Salida en VTC (Van) al Aeropuerto</div>
+              <span class="card-tag tag-travel">Vuelo 14:00 h</span>
+            </div>
+            <span class="card-chevron">▾</span>
+          </div>
+          <div class="card-notes">
+            <div class="notes-inner">
+              <span class="notes-icon">✈️</span>
+              <span class="notes-text">Vuelo a las 14:00h. Salir a las 11:00h para llegar con margen. Au revoir, París... hasta la próxima aventura mágica. ❄️</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="ice-divider">
+    <div class="ice-divider-line"></div>
+    <span class="ice-divider-star">❄</span>
+    <div class="ice-divider-line"></div>
+  </div>
+
+  <div class="footer">
+    <span class="footer-snowflake">❄</span>
+    The cold never bothered us anyway ✨
+  </div>
+
+</div>
+
+<script>
+// ---- SWITCH DAY ----
+function switchDay(idx) {
+  document.querySelectorAll('.day-panel').forEach((p,i) => {
+    p.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    t.classList.toggle('active', i === idx);
+  });
+  // Scroll tabs
+  const tabs = document.getElementById('tabs');
+  const activeTab = tabs.children[idx];
+  activeTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+}
+
+// ---- TOGGLE ITEM ----
+function toggleItem(el) {
+  const wasOpen = el.classList.contains('open');
+  // Close all in same panel
+  el.closest('.timeline').querySelectorAll('.timeline-item').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) el.classList.add('open');
+}
+
+// ---- SNOWFLAKES ----
+const canvas = document.getElementById('snow-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, flakes = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+function createFlake() {
+  return {
+    x: Math.random() * W,
+    y: Math.random() * -H,
+    r: Math.random() * 2.5 + 0.5,
+    speed: Math.random() * 0.6 + 0.2,
+    drift: Math.random() * 0.4 - 0.2,
+    opacity: Math.random() * 0.6 + 0.2,
+    type: Math.floor(Math.random() * 3)
+  };
+}
+
+function initSnow() {
+  resize();
+  flakes = Array.from({ length: 100 }, createFlake);
+  flakes.forEach(f => { f.y = Math.random() * H; });
+}
+
+function drawFlake(f) {
+  ctx.save();
+  ctx.globalAlpha = f.opacity;
+  ctx.fillStyle = '#d0eeff';
+  if (f.type === 0) {
+    // Simple circle
+    ctx.beginPath();
+    ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (f.type === 1) {
+    // Star shape
+    ctx.translate(f.x, f.y);
+    ctx.strokeStyle = '#c0e8ff';
+    ctx.lineWidth = 0.6;
+    for (let i = 0; i < 6; i++) {
+      ctx.rotate(Math.PI / 3);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, f.r * 2.5);
+      ctx.stroke();
+    }
+  } else {
+    ctx.beginPath();
+    ctx.arc(f.x, f.y, f.r * 0.7, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
+function animateSnow() {
+  ctx.clearRect(0, 0, W, H);
+  for (let f of flakes) {
+    drawFlake(f);
+    f.y += f.speed;
+    f.x += f.drift;
+    if (f.y > H + 10) {
+      f.y = -10;
+      f.x = Math.random() * W;
+    }
+    if (f.x < -10) f.x = W + 10;
+    if (f.x > W + 10) f.x = -10;
+  }
+  requestAnimationFrame(animateSnow);
+}
+
+window.addEventListener('resize', () => { resize(); });
+initSnow();
+animateSnow();
+</script>
+</body>
+</html>
