@@ -529,6 +529,179 @@
   ::-webkit-scrollbar-thumb { background: var(--frost-border); border-radius: 4px; }
 </style>
 </head>
+<style>
+  #lock-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(58,143,201,0.18) 0%, transparent 70%),
+                radial-gradient(ellipse 100% 100% at 50% 50%, #071a2e 0%, #040e1c 100%);
+    font-family: 'Nunito', sans-serif;
+  }
+
+  .lock-box {
+    text-align: center;
+    padding: 44px 36px;
+    background: rgba(184,228,249,0.07);
+    border: 1px solid rgba(126,200,227,0.25);
+    border-radius: 24px;
+    backdrop-filter: blur(16px);
+    max-width: 340px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(4,14,28,0.7);
+    position: relative;
+    overflow: hidden;
+    animation: lockFadeIn 0.6s ease;
+  }
+
+  @keyframes lockFadeIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .lock-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(184,228,249,0.6), transparent);
+  }
+
+  .lock-flake {
+    font-size: 2.8rem;
+    display: block;
+    margin-bottom: 10px;
+    animation: spin-slow 20s linear infinite;
+    filter: drop-shadow(0 0 14px rgba(126,200,227,0.7));
+  }
+
+  .lock-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.25rem;
+    background: linear-gradient(135deg, #b8e4f9, #f9d57e, #b8e4f9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  .lock-subtitle {
+    font-size: 0.8rem;
+    color: #7ec8e3;
+    opacity: 0.7;
+    margin-bottom: 28px;
+    letter-spacing: 0.08em;
+  }
+
+  .lock-input {
+    width: 100%;
+    background: rgba(7,26,46,0.8);
+    border: 1px solid rgba(126,200,227,0.35);
+    border-radius: 12px;
+    padding: 13px 18px;
+    color: #e8f6ff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    text-align: center;
+    letter-spacing: 0.15em;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    margin-bottom: 14px;
+  }
+
+  .lock-input:focus {
+    border-color: #7ec8e3;
+    box-shadow: 0 0 16px rgba(126,200,227,0.25);
+  }
+
+  .lock-input::placeholder { color: rgba(126,200,227,0.35); letter-spacing: 0.08em; }
+
+  .lock-btn {
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(135deg, rgba(58,143,201,0.5), rgba(106,195,223,0.3));
+    border: 1px solid rgba(184,228,249,0.4);
+    border-radius: 12px;
+    color: #e8f6ff;
+    font-family: 'Cinzel', serif;
+    font-size: 0.88rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .lock-btn:hover {
+    background: linear-gradient(135deg, rgba(58,143,201,0.7), rgba(106,195,223,0.5));
+    box-shadow: 0 0 20px rgba(126,200,227,0.3);
+    transform: translateY(-1px);
+  }
+
+  .lock-error {
+    margin-top: 12px;
+    font-size: 0.78rem;
+    color: #f9a94e;
+    opacity: 0;
+    transition: opacity 0.3s;
+    letter-spacing: 0.05em;
+  }
+
+  .lock-error.visible { opacity: 1; }
+
+  .lock-shake {
+    animation: shake 0.4s ease;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%       { transform: translateX(-8px); }
+    40%       { transform: translateX(8px); }
+    60%       { transform: translateX(-5px); }
+    80%       { transform: translateX(5px); }
+  }
+</style>
+
+<div id="lock-screen">
+  <div class="lock-box" id="lock-box">
+    <span class="lock-flake">❄</span>
+    <div class="lock-title">Nuestro Viaje Mágico</div>
+    <div class="lock-subtitle">Introduce la clave para continuar</div>
+    <input
+      class="lock-input"
+      id="lock-input"
+      type="password"
+      placeholder="••••••••"
+      autocomplete="off"
+      onkeydown="if(event.key==='Enter') checkPassword()"
+    />
+    <button class="lock-btn" onclick="checkPassword()">Entrar ✨</button>
+    <div class="lock-error" id="lock-error">Clave incorrecta. Inténtalo de nuevo.</div>
+  </div>
+</div>
+
+<script>
+  function checkPassword() {
+    const input = document.getElementById('lock-input').value;
+    const box   = document.getElementById('lock-box');
+    const error = document.getElementById('lock-error');
+    if (input === 'Prueba') {
+      const ls = document.getElementById('lock-screen');
+      ls.style.transition = 'opacity 0.5s ease';
+      ls.style.opacity = '0';
+      setTimeout(() => ls.remove(), 500);
+    } else {
+      error.classList.add('visible');
+      box.classList.remove('lock-shake');
+      void box.offsetWidth;
+      box.classList.add('lock-shake');
+      document.getElementById('lock-input').value = '';
+    }
+  }
+</script>
+
 <body>
 
 <div class="bg-layer">
